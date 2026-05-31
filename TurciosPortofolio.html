@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diego Turcios — Communication & Design</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --ink: #0D0C0A; --paper: #F5F0E8; --fire: #D44A1A; --fire-light: #E8724A;
+  --ocean: #1A3D5C; --gold: #C9A84C; --muted: #7A7168;
+  --faint: rgba(13,12,10,0.06); --border: rgba(13,12,10,0.1);
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Outfit', sans-serif; background: var(--paper); color: var(--ink); font-size: 16px; line-height: 1.6; overflow-x: hidden; cursor: none; }
+.cursor { position: fixed; width: 8px; height: 8px; background: var(--fire); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform 0.1s, background 0.2s; mix-blend-mode: multiply; }
+.cursor-trail { position: fixed; width: 32px; height: 32px; border: 1px solid var(--fire); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); opacity: 0.5; }
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 4rem; mix-blend-mode: multiply; }
+.nav-logo { font-family: 'Playfair Display', serif; font-weight: 900; font-size: 1.4rem; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
+.nav-logo sup { font-family: 'Outfit', sans-serif; font-size: 0.5rem; font-weight: 300; letter-spacing: 0.15em; color: var(--fire); vertical-align: top; margin-top: 0.4rem; display: inline-block; }
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; font-weight: 400; }
+.nav-links a:hover { color: var(--fire); }
+.lang-switcher { display: flex; gap: 0.3rem; }
+.lang-btn { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.25rem 0.65rem; border: 0.5px solid var(--border); background: none; cursor: pointer; font-family: 'Outfit', sans-serif; color: var(--muted); transition: all 0.2s; border-radius: 1px; }
+.lang-btn.active, .lang-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* HERO */
+.hero { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; padding: 10rem 4rem 6rem; }
+.hero-content { position: relative; z-index: 2; max-width: 680px; }
+.hero-eyebrow { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+.hero-eyebrow-line { width: 40px; height: 1px; background: var(--fire); }
+.hero-eyebrow-text { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fire); font-weight: 500; }
+h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.8rem, 7vw, 6.5rem); font-weight: 900; line-height: 0.92; letter-spacing: -0.03em; margin-bottom: 2.5rem; }
+h1 em { font-style: italic; color: var(--fire); }
+.hero-desc { font-size: 1.05rem; color: var(--muted); max-width: 480px; font-weight: 300; margin-bottom: 3rem; line-height: 1.8; }
+.hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn-primary { display: inline-flex; align-items: center; gap: 0.6rem; background: var(--fire); color: white; padding: 1rem 2.2rem; font-family: 'Outfit', sans-serif; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; border: none; cursor: pointer; text-decoration: none; transition: all 0.25s; font-weight: 500; clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); }
+.btn-primary:hover { background: var(--ink); transform: translateY(-2px); }
+.btn-outline { display: inline-flex; align-items: center; gap: 0.6rem; background: none; color: var(--ink); padding: 1rem 2.2rem; font-family: 'Outfit', sans-serif; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid var(--ink); cursor: pointer; text-decoration: none; transition: all 0.25s; font-weight: 400; }
+.btn-outline:hover { background: var(--ink); color: var(--paper); }
+
+/* PHOTO portrait hero */
+.hero-portrait {
+  position: absolute;
+  right: 4rem; bottom: 0;
+  width: clamp(260px, 28vw, 420px);
+  z-index: 1;
+  pointer-events: none;
+}
+.hero-portrait img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: top center;
+  /* clip bottom to blend with page */
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  filter: grayscale(15%);
+}
+
+.scroll-hint { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: var(--muted); font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; z-index: 5; }
+.scroll-line { width: 1px; height: 48px; background: linear-gradient(to bottom, var(--muted), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+@keyframes scrollPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+section { padding: 7rem 4rem; }
+.section-number { font-family: 'Playfair Display', serif; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fire); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; font-style: italic; }
+.section-number::before { content: ''; width: 30px; height: 1px; background: var(--fire); }
+h2 { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 900; letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 3.5rem; }
+h2 em { font-style: italic; color: var(--fire); }
+
+#about { background: white; }
+.about-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 6rem; align-items: start; }
+.about-text p { color: var(--muted); font-weight: 300; margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.85; }
+.about-text strong { color: var(--ink); font-weight: 500; }
+.about-aside { display: flex; flex-direction: column; gap: 2rem; }
+.skills-label { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.2rem; font-weight: 500; }
+.skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 2rem; }
+.skill-tag { padding: 0.65rem 1rem; border: 0.5px solid var(--border); font-size: 0.82rem; color: var(--ink); font-weight: 400; transition: all 0.2s; background: var(--faint); display: flex; align-items: center; gap: 0.5rem; }
+.skill-tag::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--fire); flex-shrink: 0; }
+.skill-tag:hover { background: var(--fire); color: white; border-color: var(--fire); }
+.skill-tag:hover::before { background: white; }
+.skill-tag.lang-tag::before { background: var(--gold); }
+.skill-tag.lang-tag .lang-lvl { margin-left: auto; font-size: 0.68rem; letter-spacing: 0.1em; color: var(--gold); font-weight: 500; }
+.skill-tag.lang-tag:hover .lang-lvl { color: rgba(255,255,255,0.75); }
+.stat-block { border-left: 2px solid var(--fire); padding-left: 1.5rem; }
+.stat-num { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; color: var(--ink); line-height: 1; }
+.stat-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.05em; margin-top: 0.25rem; }
+
+#projects { background: var(--paper); }
+#projects .section-number { color: var(--ocean); }
+#projects .section-number::before { background: var(--ocean); }
+
+.projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
+.project-card { background: var(--paper); padding: 2.5rem 2rem; transition: all 0.35s ease; position: relative; overflow: hidden; cursor: pointer; }
+.project-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--fire); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+.project-card:hover { background: white; }
+.project-card:hover::after { transform: scaleX(1); }
+.project-card.active { background: white; }
+.project-card.active::after { transform: scaleX(1); }
+
+.project-num { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 900; color: rgba(13,12,10,0.05); line-height: 1; margin-bottom: 1.5rem; letter-spacing: -0.04em; }
+.project-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 0.4rem; color: var(--ink); letter-spacing: -0.02em; }
+.project-place { font-size: 0.72rem; color: var(--fire); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 1.2rem; font-weight: 500; }
+.project-desc { font-size: 0.9rem; color: var(--muted); font-weight: 300; line-height: 1.7; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.8rem; }
+.project-tag { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.65rem; border: 0.5px solid var(--border); color: var(--muted); }
+.project-toggle { display: flex; align-items: center; gap: 0.5rem; margin-top: 1.5rem; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--fire); font-weight: 500; }
+.project-toggle-icon { width: 20px; height: 20px; border: 1px solid var(--fire); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: transform 0.3s; }
+.project-card.active .project-toggle-icon { transform: rotate(45deg); }
+
+.project-detail { grid-column: 1 / -1; background: white; max-height: 0; overflow: hidden; transition: max-height 0.6s cubic-bezier(0.22,1,0.36,1), padding 0.4s ease; padding: 0 3rem; border-top: 0.5px solid var(--border); }
+.project-detail.open { max-height: 900px; padding: 3rem; }
+.detail-inner { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: start; }
+.detail-images { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+.detail-images img { width: 100%; aspect-ratio: 1/1; object-fit: contain; background: var(--faint); filter: grayscale(10%); transition: filter 0.3s; }
+.detail-images img:hover { filter: grayscale(0%); }
+.detail-content h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; letter-spacing: -0.02em; margin-bottom: 1rem; }
+.detail-content h3 em { font-style: italic; color: var(--fire); }
+.detail-content p { font-size: 0.95rem; color: var(--muted); font-weight: 300; line-height: 1.85; margin-bottom: 1rem; }
+.detail-meta { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1.5rem; }
+.detail-meta-item { display: flex; gap: 1rem; font-size: 0.82rem; }
+.detail-meta-label { color: var(--fire); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; min-width: 80px; }
+.detail-meta-value { color: var(--muted); font-weight: 300; }
+
+.projects-footer { margin-top: 3.5rem; display: flex; align-items: center; justify-content: space-between; border-top: 0.5px solid var(--border); padding-top: 2rem; }
+.projects-footer-text { font-size: 0.85rem; color: var(--muted); font-weight: 300; }
+
+#contact { background: var(--paper); }
+.contact-split { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+.big-cta { font-family: 'Playfair Display', serif; font-size: clamp(2.8rem, 5vw, 4.5rem); font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: var(--ink); }
+.big-cta em { font-style: italic; color: var(--fire); }
+.contact-subtext { margin-top: 1.5rem; font-size: 0.9rem; color: var(--muted); font-weight: 300; line-height: 1.8; max-width: 340px; }
+.contact-info { display: flex; flex-direction: column; gap: 0.8rem; }
+.contact-item { display: flex; align-items: center; gap: 1.2rem; padding: 1.1rem 1.4rem; border: 0.5px solid var(--border); text-decoration: none; color: var(--ink); transition: all 0.25s; font-size: 0.9rem; font-weight: 300; background: white; position: relative; overflow: hidden; }
+.contact-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--fire); transform: scaleY(0); transition: transform 0.25s; }
+.contact-item:hover::before { transform: scaleY(1); }
+.contact-item:hover { border-color: var(--fire); padding-left: 1.7rem; }
+.contact-icon { width: 38px; height: 38px; background: var(--ink); color: var(--paper); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; font-weight: 500; }
+footer { background: var(--ink); color: rgba(245,240,232,0.3); padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; letter-spacing: 0.05em; }
+
+.reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1); }
+.reveal.in { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+
+.hero-content > * { opacity: 0; transform: translateY(20px); animation: heroEntry 0.8s cubic-bezier(0.22,1,0.36,1) forwards; }
+.hero-content .hero-eyebrow { animation-delay: 0.1s; }
+.hero-content h1 { animation-delay: 0.25s; }
+.hero-content .hero-desc { animation-delay: 0.4s; }
+.hero-content .hero-cta { animation-delay: 0.55s; }
+@keyframes heroEntry { to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 8rem 1.5rem 5rem; }
+  .hero-portrait { display: none; }
+  section { padding: 4rem 1.5rem; }
+  .about-grid, .contact-split { grid-template-columns: 1fr; gap: 3rem; }
+  .projects-grid { grid-template-columns: 1fr; gap: 0; }
+  .project-detail.open { max-height: 1200px; padding: 2rem 1.5rem; }
+  .detail-inner { grid-template-columns: 1fr; gap: 2rem; }
+  footer { padding: 1.5rem; flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+
+<nav>
+  <a href="#" class="nav-logo">DT<sup>©</sup></a>
+  <ul class="nav-links">
+    <li><a href="#about" data-i18n="nav_about">À propos</a></li>
+    <li><a href="#projects" data-i18n="nav_projects">Projets</a></li>
+    <li><a href="#contact" data-i18n="nav_contact">Contact</a></li>
+  </ul>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('es')">ES</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <div class="hero-eyebrow-text" data-i18n="hero_tag">Communication · Design · Web</div>
+    </div>
+    <h1>Diego<br><em>Turcios</em></h1>
+    <p class="hero-desc" data-i18n="hero_desc">Communication et design en alternance. Créatif, multilingue, passionné par l'UX, le design et la stratégie digitale.</p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary" data-i18n="hero_btn1">Voir mes projets →</a>
+      <a href="#contact" class="btn-outline" data-i18n="hero_btn2">Me contacter</a>
+    </div>
+  </div>
+
+  <!-- Portrait photo top-right -->
+  <div class="hero-portrait">
+    <img src="IMG_2950.jpg" alt="Diego Turcios">
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<section id="about">
+  <div class="section-number" data-i18n="section_about">À propos</div>
+  <div class="about-grid">
+    <div class="reveal">
+      <h2 data-i18n="about_title">Créatif,<br>stratège &<br><em>multilingue.</em></h2>
+      <div class="about-text">
+        <p data-i18n="about_p1">Étudiant en <strong>Master Communication Web Multilingue</strong> à l'Université de Strasbourg, je combine design, développement et stratégie de contenu pour créer des expériences digitales cohérentes.</p>
+        <p data-i18n="about_p2">Ancien <strong>capitaine d'équipe de natation</strong> de haut niveau, j'apporte discipline, leadership et résilience dans chaque projet.</p>
+      </div>
+    </div>
+    <div class="about-aside reveal reveal-delay-2">
+      <div>
+        <div class="skills-label" data-i18n="skills_label">Compétences</div>
+        <div class="skills-grid">
+          <div class="skill-tag">HTML / CSS</div>
+          <div class="skill-tag">WordPress</div>
+          <div class="skill-tag">Figma</div>
+          <div class="skill-tag">Adobe Suite</div>
+          <div class="skill-tag">UX / UI</div>
+          <div class="skill-tag">Social Media</div>
+          <div class="skill-tag">Motion Design</div>
+          <div class="skill-tag">Comm. B2B</div>
+        </div>
+        <div class="skills-label" data-i18n="langs_label" style="margin-top:0.5rem;">Langues</div>
+        <div class="skills-grid" style="grid-template-columns: 1fr;">
+          <div class="skill-tag lang-tag">Español <span class="lang-lvl">Natif</span></div>
+          <div class="skill-tag lang-tag">Français <span class="lang-lvl">C1</span></div>
+          <div class="skill-tag lang-tag">English <span class="lang-lvl">C1</span></div>
+        </div>
+      </div>
+      <div style="display:flex; gap:2rem; margin-top:1rem;">
+        <div class="stat-block"><div class="stat-num">3</div><div class="stat-label" data-i18n="stat_langs">Langues</div></div>
+        <div class="stat-block"><div class="stat-num">3</div><div class="stat-label" data-i18n="stat_projects">Projets</div></div>
+        <div class="stat-block"><div class="stat-num">M1</div><div class="stat-label" data-i18n="stat_level">Niveau</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-number" data-i18n="section_projects">Projets</div>
+  <h2 class="reveal" data-i18n="projects_title">Expériences<br>& <em>réalisations.</em></h2>
+
+  <div class="projects-grid">
+
+    <!-- Card 01 -->
+    <div class="project-card reveal" onclick="toggleDetail('detail-1', this)">
+      <div class="project-num">01</div>
+      <div class="project-title">Café Bretelle</div>
+      <div class="project-place">Strasbourg · En cours</div>
+      <p class="project-desc" data-i18n="proj1_desc">Refonte complète du site web : conception, structuration, identité graphique, UX/UI et localisation multilingue.</p>
+      <div class="project-tags">
+        <span class="project-tag">Web design</span>
+        <span class="project-tag">UX/UI</span>
+        <span class="project-tag">Traduction</span>
+      </div>
+      <div class="project-toggle">
+        <div class="project-toggle-icon">+</div>
+        <span data-i18n="toggle_label">Voir le projet</span>
+      </div>
+    </div>
+
+    <!-- Card 02 -->
+    <div class="project-card reveal reveal-delay-1" onclick="toggleDetail('detail-2', this)">
+      <div class="project-num">02</div>
+      <div class="project-title">Kell'Agence</div>
+      <div class="project-place">Strasbourg · 2025</div>
+      <p class="project-desc" data-i18n="proj2_desc">Création de contenu pour les réseaux sociaux (Instagram, Facebook, LinkedIn), communication B2B et coordination d'événements.</p>
+      <div class="project-tags">
+        <span class="project-tag">Social Media</span>
+        <span class="project-tag">B2B</span>
+        <span class="project-tag">Événementiel</span>
+      </div>
+      <div class="project-toggle">
+        <div class="project-toggle-icon">+</div>
+        <span data-i18n="toggle_label">Voir le projet</span>
+      </div>
+    </div>
+
+    <!-- Card 03 -->
+    <div class="project-card reveal reveal-delay-2" onclick="toggleDetail('detail-3', this)">
+      <div class="project-num">03</div>
+      <div class="project-title">AJ Swim Team</div>
+      <div class="project-place">Honduras · 2022</div>
+      <p class="project-desc" data-i18n="proj3_desc">Assistant réseaux sociaux pour une équipe de natation de haut niveau. Gestion de contenu et communication digitale.</p>
+      <div class="project-tags">
+        <span class="project-tag">Community Mgmt</span>
+        <span class="project-tag">Contenu</span>
+      </div>
+      <div class="project-toggle">
+        <div class="project-toggle-icon">+</div>
+        <span data-i18n="toggle_label">Voir le projet</span>
+      </div>
+    </div>
+
+    <!-- Detail 01 — Café Bretelle -->
+    <div class="project-detail" id="detail-1">
+      <div class="detail-inner">
+        <div class="detail-images">
+          <img src="ACCUEIL.jpg" alt="Café Bretelle accueil">
+          <img src="screenshot_cafe.png" alt="Café Bretelle site web">
+          <img src="ACCUEIL.jpg" alt="Café Bretelle intérieur" style="object-position: right center;">
+        </div>
+        <div class="detail-content">
+          <h3>Café <em>Bretelle</em></h3>
+          <p data-i18n="detail1_p1">Refonte complète du site web d'un café strasbourgeois. Mission : moderniser l'identité digitale, améliorer l'expérience utilisateur et rendre le site accessible en trois langues.</p>
+          <p data-i18n="detail1_p2">Conception sous Figma, intégration WordPress, optimisation SEO et traduction FR / EN / ES.</p>
+          <div class="detail-meta">
+            <div class="detail-meta-item"><span class="detail-meta-label" data-i18n="meta_client">Client</span><span class="detail-meta-value">Café Bretelle, Strasbourg</span></div>
+            <div class="detail-meta-item"><span class="detail-meta-label" data-i18n="meta_tools">Outils</span><span class="detail-meta-value">Figma, WordPress, Adobe Illustrator</span></div>
+            <div class="detail-meta-item"><span class="detail-meta-label" data-i18n="meta_period">Période</span><span class="detail-meta-value">2026 — En cours</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail 02 — Kell'Agence -->
+    <div class="project-detail" id="detail-2">
+      <div class="detail-inner">
+        <div class="detail-images">
+          <img src="kellagence.jpg" alt="Kell'Agence">
+          <img src="Kellagence2.jpg" alt="Kell'Agence contenu">
+          <img src="kellagence3.jpg" alt="Kell'Agence événement">
+        </div>
+        <div class="detail-content">
+          <h3>Kell'<em>Agence</em></h3>
+          <p data-i18n="detail2_p1">Stage au sein d'une agence événementielle strasbourgeoise. Création de contenus visuels et rédactionnels pour Instagram, Facebook et LinkedIn.</p>
+          <p data-i18n="detail2_p2">Communication B2B, création de contenu multimédia et développement de la stratégie digitale.</p>
+          <div class="detail-meta">
+            <div class="detail-meta-item"><span class="detail-meta-label" data-i18n="meta_client">Client</span><span class="detail-meta-value">Kell'Agence, Strasbourg</span></div>
+            <div class="detail-meta-item"><span class="detail-meta-label" data-i18n="meta_tools">Outils</span><span class="detail-meta-value">Canva, Meta Business</span></div>
+            <div class="detail-meta-item"><span class="detail-meta-label" data-i18n="meta_period">Période</span><span class="detail-meta-value">2025</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail 03 — AJ Swim Team -->
+    <div class="project-detail" id="detail-3">
+      <div class="detail-inner">
+        <div class="detail-images">
+          <img src="swim2.jpg" alt="AJ Swim Team compétition">
+          <img src="swim1.jpg" alt="AJ Swim Team podium">
+          <img src="swim3.jpg" alt="AJ Swim Team résultats">
+        </div>
+        <div class="detail-content">
+          <h3>AJ <em>Swim Team</em></h3>
+          <p data-i18n="detail3_p1">Gestion des réseaux sociaux d'une équipe de natation de haut niveau basée au Honduras. Création de contenus, couverture des compétitions et développement de la communauté en ligne.</p>
+          <p data-i18n="detail3_p2">En tant qu'ancien capitaine d'équipe, j'ai combiné expertise sportive et compétences digitales pour produire un contenu authentique et engageant.</p>
+          <div class="detail-meta">
+            <div class="detail-meta-item"><span class="detail-meta-label" data-i18n="meta_client">Client</span><span class="detail-meta-value">AJ Swim Team, Honduras</span></div>
+            <div class="detail-meta-item"><span class="detail-meta-label" data-i18n="meta_tools">Outils</span><span class="detail-meta-value">Instagram, Adobe Suite, Canva</span></div>
+            <div class="detail-meta-item"><span class="detail-meta-label" data-i18n="meta_period">Période</span><span class="detail-meta-value">2022</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="projects-footer reveal">
+    <span class="projects-footer-text" data-i18n="available_text">Disponible pour de nouvelles missions · Strasbourg, France</span>
+    <a href="#contact" class="btn-primary" data-i18n="hero_btn2">Me contacter</a>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="section-number" data-i18n="section_contact">Contact</div>
+  <div class="contact-split">
+    <div class="reveal">
+      <p class="big-cta" data-i18n="contact_cta">Travaillons<br><em>ensemble.</em></p>
+      <p class="contact-subtext" data-i18n="contact_subtext">Ouvert aux opportunités en alternance et projets créatifs. N'hésitez pas à m'écrire.</p>
+    </div>
+    <div class="contact-info reveal reveal-delay-2">
+      <a href="mailto:drturcios04@gmail.com" class="contact-item"><div class="contact-icon">@</div>drturcios04@gmail.com</a>
+      <a href="tel:+33623145546" class="contact-item"><div class="contact-icon">☏</div>+33 6 23 14 55 46</a>
+      <a href="https://www.linkedin.com/in/diegoturciospadilla" target="_blank" class="contact-item"><div class="contact-icon">in</div>linkedin.com/in/diegoturciospadilla</a>
+      <div class="contact-item" style="pointer-events:none;"><div class="contact-icon">⌖</div>Strasbourg, France</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Diego Turcios — Communication & Design</span>
+  <span data-i18n="footer_text">Fait avec passion à Strasbourg</span>
+</footer>
+
+<script>
+const translations = {
+  fr: {
+    nav_about:"À propos",nav_projects:"Projets",nav_contact:"Contact",
+    hero_tag:"Communication · Design · Web",
+    hero_desc:"Communication et design en alternance. Créatif, multilingue, passionné par l'UX, le design et la stratégie digitale.",
+    hero_btn1:"Voir mes projets →",hero_btn2:"Me contacter",
+    section_about:"À propos",about_title:"Créatif,\nstratège &\nmultilingue.",
+    about_p1:"Étudiant en <strong>Master Communication Web Multilingue</strong> à l'Université de Strasbourg, je combine design, développement et stratégie de contenu pour créer des expériences digitales cohérentes.",
+    about_p2:"Ancien <strong>capitaine d'équipe de natation</strong> de haut niveau, j'apporte discipline, leadership et résilience dans chaque projet.",
+    skills_label:"Compétences",langs_label:"Langues",
+    stat_langs:"Langues",stat_projects:"Projets",stat_level:"Niveau",
+    section_projects:"Projets",projects_title:"Expériences\n& réalisations.",
+    toggle_label:"Voir le projet",
+    proj1_desc:"Refonte complète du site web : conception, structuration, identité graphique, UX/UI et localisation multilingue.",
+    proj2_desc:"Création de contenu pour les réseaux sociaux (Instagram, Facebook, LinkedIn), communication B2B et coordination d'événements.",
+    proj3_desc:"Assistant réseaux sociaux pour une équipe de natation de haut niveau. Gestion de contenu et communication digitale.",
+    detail1_p1:"Refonte complète du site web d'un café strasbourgeois. Mission : moderniser l'identité digitale, améliorer l'expérience utilisateur et rendre le site accessible en trois langues.",
+    detail1_p2:"Conception sous Figma, intégration WordPress, optimisation SEO et traduction FR / EN / ES.",
+    detail2_p1:"Stage au sein d'une agence événementielle strasbourgeoise. Création de contenus visuels et rédactionnels pour Instagram, Facebook et LinkedIn.",
+    detail2_p2:"Communication B2B, création de contenu multimédia et développement de la stratégie digitale.",
+    detail3_p1:"Gestion des réseaux sociaux d'une équipe de natation de haut niveau basée au Honduras. Création de contenus, couverture des compétitions et développement de la communauté en ligne.",
+    detail3_p2:"En tant qu'ancien capitaine d'équipe, j'ai combiné expertise sportive et compétences digitales pour produire un contenu authentique et engageant.",
+    meta_client:"Client",meta_tools:"Outils",meta_period:"Période",
+    available_text:"Disponible pour de nouvelles missions · Strasbourg, France",
+    contact_subtext:"Ouvert aux opportunités en alternance et projets créatifs. N'hésitez pas à m'écrire.",
+    section_contact:"Contact",contact_cta:"Travaillons\nensemble.",footer_text:"Fait avec passion à Strasbourg"
+  },
+  en: {
+    nav_about:"About",nav_projects:"Projects",nav_contact:"Contact",
+    hero_tag:"Communication · Design · Web",
+    hero_desc:"Communication and design apprentice. Creative, multilingual, passionate about UX, design and digital strategy.",
+    hero_btn1:"See my work →",hero_btn2:"Get in touch",
+    section_about:"About",about_title:"Creative,\nstrategic &\nmultilingual.",
+    about_p1:"Master's student in <strong>Multilingual Web Communication</strong> at the University of Strasbourg, combining design, development and content strategy to build coherent digital experiences.",
+    about_p2:"Former <strong>high-level swimming team captain</strong>, I bring discipline, leadership and resilience to every project.",
+    skills_label:"Skills",langs_label:"Languages",
+    stat_langs:"Languages",stat_projects:"Projects",stat_level:"Level",
+    section_projects:"Projects",projects_title:"Experience\n& work.",
+    toggle_label:"View project",
+    proj1_desc:"Full website redesign: concept, structure, visual identity, UX/UI and multilingual localization.",
+    proj2_desc:"Content creation for social media (Instagram, Facebook, LinkedIn), B2B communication and event coordination.",
+    proj3_desc:"Social media assistant for a high-level swimming team. Content management and digital communication.",
+    detail1_p1:"Full redesign of a Strasbourg café's website. Goal: modernize the digital identity, improve the user experience and make the site accessible in three languages.",
+    detail1_p2:"Design in Figma, WordPress integration, SEO optimization and FR / EN / ES translation.",
+    detail2_p1:"Internship at a Strasbourg event communication agency. Visual and editorial content creation for Instagram, Facebook and LinkedIn.",
+    detail2_p2:"B2B communication, multimedia content creation and digital strategy development.",
+    detail3_p1:"Social media management for a high-level swimming team based in Honduras. Content creation, competition coverage and online community growth.",
+    detail3_p2:"As a former team captain, I combined sports expertise and digital skills to produce authentic, engaging content.",
+    meta_client:"Client",meta_tools:"Tools",meta_period:"Period",
+    available_text:"Available for new projects · Strasbourg, France",
+    contact_subtext:"Open to internship opportunities and creative projects. Feel free to reach out.",
+    section_contact:"Contact",contact_cta:"Let's work\ntogether.",footer_text:"Made with passion in Strasbourg"
+  },
+  es: {
+    nav_about:"Sobre mí",nav_projects:"Proyectos",nav_contact:"Contacto",
+    hero_tag:"Comunicación · Diseño · Web",
+    hero_desc:"Comunicación y diseño en alternancia. Creativo, multilingüe, interesado en el UX, el diseño y la estrategia digital.",
+    hero_btn1:"Ver mis proyectos →",hero_btn2:"Contáctame",
+    section_about:"Sobre mí",about_title:"Creativo,\nestratega &\nmultilingüe.",
+    about_p1:"Estudiante de <strong>Máster en Comunicación Web Multilingüe</strong> en la Universidad de Estrasburgo, combinando diseño, desarrollo web y estrategia de contenido.",
+    about_p2:"Ex <strong>capitán de equipo de natación</strong> de alto nivel, cuento con disciplina, liderazgo y resiliencia en cada proyecto.",
+    skills_label:"Habilidades",langs_label:"Idiomas",
+    stat_langs:"Idiomas",stat_projects:"Proyectos",stat_level:"Nivel",
+    section_projects:"Proyectos",projects_title:"Experiencia\n& proyectos.",
+    toggle_label:"Ver proyecto",
+    proj1_desc:"Rediseño completo del sitio web: concepción, estructura, identidad gráfica, UX/UI y localización multilingüe.",
+    proj2_desc:"Creación de contenido para redes sociales (Instagram, Facebook, LinkedIn), comunicación B2B y coordinación de eventos.",
+    proj3_desc:"Asistente de redes sociales para un equipo de natación de alto nivel. Gestión de contenido y comunicación digital.",
+    detail1_p1:"Rediseño completo del sitio web de un café en Estrasburgo. Objetivo: modernizar la identidad digital, mejorar la experiencia de usuario y hacer el sitio accesible en tres idiomas.",
+    detail1_p2:"Diseño en Figma, integración WordPress, optimización SEO y traducción FR / EN / ES.",
+    detail2_p1:"Prácticas en una agencia de comunicación y eventos en Estrasburgo. Creación de contenido visual y editorial para Instagram, Facebook y LinkedIn.",
+    detail2_p2:"Comunicación B2B, creación de contenido multimedia y desarrollo de estrategia digital.",
+    detail3_p1:"Gestión de redes sociales de un equipo de natación de alto nivel en Honduras. Creación de contenido, cobertura de competencias y crecimiento de la comunidad en línea.",
+    detail3_p2:"Como ex capitán del equipo, combiné experiencia deportiva y habilidades digitales para producir contenido auténtico y atractivo.",
+    meta_client:"Cliente",meta_tools:"Herramientas",meta_period:"Período",
+    available_text:"Disponible para nuevos proyectos · Estrasburgo, Francia",
+    contact_subtext:"Abierto a oportunidades de prácticas y proyectos creativos. No dudes en escribirme.",
+    section_contact:"Contacto",contact_cta:"Trabajemos\njuntos.",footer_text:"Hecho con pasión en Estrasburgo"
+  }
+};
+
+function setLang(lang) {
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+  const t = translations[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (!t[key]) return;
+    if (el.tagName === 'H2' || el.classList.contains('big-cta')) {
+      el.innerHTML = t[key].replace(/\n/g,'<br>');
+    } else if (el.tagName === 'P') {
+      el.innerHTML = t[key];
+    } else {
+      el.textContent = t[key];
+    }
+  });
+  document.documentElement.lang = lang;
+}
+
+let activeDetail = null;
+let activeCard = null;
+function toggleDetail(id, card) {
+  const detail = document.getElementById(id);
+  if (activeDetail && activeDetail !== detail) {
+    activeDetail.classList.remove('open');
+    if (activeCard) activeCard.classList.remove('active');
+  }
+  if (detail.classList.contains('open')) {
+    detail.classList.remove('open');
+    card.classList.remove('active');
+    activeDetail = null; activeCard = null;
+  } else {
+    detail.classList.add('open');
+    card.classList.add('active');
+    activeDetail = detail; activeCard = card;
+    setTimeout(() => detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
+  }
+}
+
+const cur = document.getElementById('cursor');
+const trail = document.getElementById('cursorTrail');
+let mx=0,my=0,tx=0,ty=0,rafId;
+document.addEventListener('mousemove',e=>{
+  mx=e.clientX; my=e.clientY;
+  cur.style.left=mx+'px'; cur.style.top=my+'px';
+  if(!rafId) rafId=requestAnimationFrame(animateTrail);
+});
+function animateTrail(){
+  tx+=(mx-tx)*0.15; ty+=(my-ty)*0.15;
+  trail.style.left=tx+'px'; trail.style.top=ty+'px';
+  if(Math.abs(mx-tx)+Math.abs(my-ty)<0.5){rafId=null;return;}
+  rafId=requestAnimationFrame(animateTrail);
+}
+document.querySelectorAll('a,button,.project-card,.skill-tag').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(2.5)';trail.style.opacity='0.25';});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';trail.style.opacity='0.5';});
+});
+
+const obs = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); }); },{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
